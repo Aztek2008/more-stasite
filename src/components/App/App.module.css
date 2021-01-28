@@ -1,0 +1,8 @@
+.buttonContainer {
+  position: absolute;
+  display: flex;
+  justify-content: space-between;
+  width: 45%;
+  top: 48%;
+  left: 26%;
+}

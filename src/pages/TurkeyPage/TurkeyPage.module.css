@@ -1,0 +1,27 @@
+.ContainerDims {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  background-image: url("../../assets/kaputas_beach_1.jpg");
+  background-size: cover;
+}
+
+.p {
+  font-family: "Amatic SC", cursive;
+  font-size: 80px !important;
+  font-weight: 700;
+  color: rgb(235, 235, 235) !important;
+}
+
+/* PAGE STYLES */
+
+.appear {
+  opacity: 0;
+}
+
+.appearActive {
+  opacity: 1;
+  transition: opacity 300ms ease-out;
+}

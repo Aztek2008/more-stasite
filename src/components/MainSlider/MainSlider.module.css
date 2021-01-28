@@ -1,0 +1,10 @@
+.ContainerDims {
+  height: 100vh;
+}
+
+.p {
+  font-family: "Amatic SC", cursive;
+  font-size: 80px !important;
+  font-weight: 700;
+  color: rgb(235, 235, 235) !important;
+}

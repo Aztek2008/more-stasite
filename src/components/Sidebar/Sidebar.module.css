@@ -1,0 +1,33 @@
+.flagContainer {
+  background: #faf9f9;
+  width: 300px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: "Amatic SC", cursive;
+  font-size: x-large;
+}
+
+.flag {
+  color: #fff;
+  opacity: 0.7;
+}
+
+.button {
+  font-family: "Amatic SC", cursive;
+  font-size: x-large;
+}
+/* fa-dark stated at index.css */
+
+.goBackButton {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  top: 10px;
+  left: 10px;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+}

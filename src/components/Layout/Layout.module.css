@@ -1,0 +1,8 @@
+.layout {
+  position: relative;
+  display: flex;
+  justify-content: flex-start;
+  max-width: 1170px;
+  height: 100vh;
+  margin: 0 auto;
+}

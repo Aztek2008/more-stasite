@@ -78,11 +78,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ButtonBases({ children }) {
+export default function ButtonBases(props) {
   const classes = useStyles();
 
   return (
     <ButtonBase
+      onClick={() => props.toggleLogin()}
       focusRipple
       className={classes.image}
       focusVisibleClassName={classes.focusVisible}
@@ -97,7 +98,7 @@ export default function ButtonBases({ children }) {
         color="inherit"
         className={classes.imageTitle}
       >
-        {children}
+        {props.children}
       </Typography>
     </ButtonBase>
   );

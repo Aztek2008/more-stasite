@@ -1,0 +1,15 @@
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  min-height: 20%;
+}
+
+.button {
+  font-family: "Amatic SC", cursive;
+  font-size: x-large;
+  background-color: transparent;
+  cursor: pointer;
+}

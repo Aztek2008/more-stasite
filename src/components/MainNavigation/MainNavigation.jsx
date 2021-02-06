@@ -1,16 +1,11 @@
 import React from "react";
 import { NavLink, BrowserRouter as Router } from "react-router-dom";
-// import { createBrowserHistory } from "history";
+import withAuthContext from "../hoc/withAuthContext.js";
 
 import styles from "./MainNavigation.module.css";
 
-export default function MainNavigation({ props }) {
-  // console.log("props at main nav", props);
+function MainNavigation({ auth, props }) {
   const { path } = props.match;
-
-  const sidebarOpener = () => {
-    props.openSideMenu();
-  };
 
   return (
     <Router>
@@ -21,10 +16,11 @@ export default function MainNavigation({ props }) {
         <div className={styles.flagContainer}>
           <i className="fas fa-long-arrow-alt-down fa-light fa-3x"></i>
         </div>
+
         <nav className={styles.ContainerNav}>
           <NavLink
             onClick={() => {
-              sidebarOpener(); // INITIATE OPEN SIDE BAR FN WHEN CLICKED
+              auth.openSideMenu();
               props.history.push({ pathname: `${path}/ExplorePage` });
             }}
             className={styles.navLink}
@@ -33,9 +29,10 @@ export default function MainNavigation({ props }) {
           >
             explore
           </NavLink>
+
           <NavLink
             onClick={() => {
-              sidebarOpener(); // INITIATE OPEN SIDE BAR FN WHEN CLICKED
+              auth.openSideMenu();
               props.history.push({ pathname: `${path}/ExpensesPage` });
             }}
             className={styles.navLink}
@@ -44,9 +41,10 @@ export default function MainNavigation({ props }) {
           >
             expense
           </NavLink>
+
           <NavLink
             onClick={() => {
-              sidebarOpener(); // INITIATE OPEN SIDE BAR FN WHEN CLICKED
+              auth.openSideMenu();
               props.history.push({ pathname: `${path}/GetReadyPage` });
             }}
             className={styles.navLink}
@@ -60,6 +58,8 @@ export default function MainNavigation({ props }) {
     </Router>
   );
 }
+
+export default withAuthContext(MainNavigation);
 
 /**
  * EXPLORE, GET READY - public routes

@@ -8,30 +8,36 @@ import Sidebar from "../Sidebar";
 import NorwayPage from "../../pages/NorwayPage";
 import TurkeyPage from "../../pages/TurkeyPage";
 import MontenegroPage from "../../pages/MontenegroPage";
+import AuthContext from "../../contexts/Auth.js";
 
 import style from "./App.module.css";
 import "./App.CSSTransition.css";
+
+const user = {
+  name: "John Galt",
+  email: "galt@gmail.com",
+};
 
 export default class App extends Component {
   state = {
     locations: ["Norway", "Turkey", "Montenegro"], //TODO: TO FIX LOCATION CHOOSE METHOD
     index: 0,
     openSidebar: false,
+    user: null,
+    shouldLogin: false,
   };
 
   componentDidMount() {
     const storedIndex = localStorage.getItem("index");
-    const storedSidebarState = localStorage.getItem("openSidebar");
+    const storedSidebarState = JSON.parse(localStorage.getItem("openSidebar"));
+    const persistedUser = JSON.parse(localStorage.getItem("currentUser"));
     const currentIndex = this.state.locations.indexOf(storedIndex);
 
     this.setState({
       openSidebar: storedSidebarState || false,
       index: currentIndex === -1 ? 0 : storedIndex,
+      user: persistedUser,
     });
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    // localStorage.setItem("openSidebar", this.state.openSidebar);
   }
 
   currentLocation = () => {
@@ -71,8 +77,8 @@ export default class App extends Component {
     localStorage.setItem("index", index);
   };
 
-  initOpenSideMenu = () => {
-    this.setState({ openSidebar: true });
+  initOpenSideMenu = async () => {
+    await this.setState({ openSidebar: true });
 
     localStorage.setItem("openSidebar", this.state.openSidebar);
   };
@@ -81,8 +87,21 @@ export default class App extends Component {
     this.setState({ openSidebar: false });
 
     history.back();
+    history.back(); // ONE IS NOT ENOUGH
 
     localStorage.removeItem("openSidebar");
+  };
+
+  logIn = async () => {
+    await this.setState({ user: user });
+
+    localStorage.setItem("currentUser", JSON.stringify(this.state.user));
+  };
+
+  logOut = () => {
+    this.setState({ user: null });
+
+    localStorage.removeItem("currentUser");
   };
 
   render() {
@@ -91,64 +110,63 @@ export default class App extends Component {
     const { openSidebar } = this.state;
 
     return (
-      <Layout>
-        <CSSTransition
-          in={openSidebar}
-          classNames="fade"
-          timeout={250}
-          unmountOnExit
-        >
-          <Sidebar
-            props={calculatedPath}
-            closeSideMenu={this.initCloseSideMenu}
-          />
-        </CSSTransition>
+      <AuthContext.Provider
+        value={{
+          openSideMenu: this.initOpenSideMenu,
+          closeSideMenu: this.initCloseSideMenu,
+          shouldLogin: this.state.shouldLogin,
+          user: this.state.user,
+          logout: this.logOut,
+          login: this.logIn,
+        }}
+      >
+        <Layout>
+          <CSSTransition
+            in={openSidebar}
+            classNames="fade"
+            timeout={250}
+            unmountOnExit
+          >
+            <Sidebar props={calculatedPath} />
+          </CSSTransition>
 
-        <div className={style.buttonContainer}>
-          <NavLink to={calculatedPath} onClick={() => this.decreaseIndex()}>
-            <i className="fas fa-long-arrow-alt-left fa-light fa-3x"></i>
-          </NavLink>
-          <NavLink to={calculatedPath} onClick={() => this.increaseIndex()}>
-            <i className="fas fa-long-arrow-alt-right fa-light fa-3x"></i>
-          </NavLink>
-        </div>
-        {/* <CSSTransition
-          in={true}
-          appear={true}
-          classNames="page"
-          timeout={300}
-          unmountOnExit
-        > */}
-        <Switch>
-          <Route exact path="/">
-            <Redirect to="/TurkeyPage" />
-          </Route>
-          <Route
-            exaxt
-            path="/TurkeyPage"
-            render={(props) => (
-              <TurkeyPage {...props} openSideMenu={this.initOpenSideMenu} />
-            )}
-          />
-          <Route
-            exaxt
-            path="/NorwayPage"
-            render={(props) => (
-              <NorwayPage {...props} openSideMenu={this.initOpenSideMenu} />
-            )}
-          />
+          <div className={style.buttonContainer}>
+            <NavLink to={calculatedPath} onClick={() => this.decreaseIndex()}>
+              <i className="fas fa-long-arrow-alt-left fa-light fa-3x"></i>
+            </NavLink>
+            <NavLink to={calculatedPath} onClick={() => this.increaseIndex()}>
+              <i className="fas fa-long-arrow-alt-right fa-light fa-3x"></i>
+            </NavLink>
+          </div>
+          <Switch>
+            <Route exact path="/">
+              <Redirect to="/TurkeyPage" />
+            </Route>
+            <Route
+              path="/TurkeyPage"
+              render={(props) => (
+                <TurkeyPage {...props} openSideMenu={this.initOpenSideMenu} />
+              )}
+            />
+            <Route
+              path="/NorwayPage"
+              render={(props) => (
+                <NorwayPage {...props} openSideMenu={this.initOpenSideMenu} />
+              )}
+            />
 
-          <Route
-            exaxt
-            path="/MontenegroPage"
-            render={(props) => (
-              <MontenegroPage {...props} openSideMenu={this.initOpenSideMenu} />
-            )}
-          />
-          {/* <Route exaxt path="/MontenegroPage" component={MontenegroPage} /> */}
-        </Switch>
-        {/* </CSSTransition> */}
-      </Layout>
+            <Route
+              path="/MontenegroPage"
+              render={(props) => (
+                <MontenegroPage
+                  {...props}
+                  openSideMenu={this.initOpenSideMenu}
+                />
+              )}
+            />
+          </Switch>
+        </Layout>
+      </AuthContext.Provider>
     );
   }
 }

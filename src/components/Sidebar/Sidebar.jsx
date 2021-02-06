@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { Route, Switch } from "react-router-dom";
-// import { CSSTransition } from "react-transition-group";
-import history from "history/browser";
+import { CSSTransition } from "react-transition-group";
+import withAuthContext from "../hoc/withAuthContext.js";
 
 import Button from "../Buttons";
-// import LoginPage from "../../pages/LoginPage";
+import LoginPage from "../../pages/LoginPage";
 import ExplorePage from "../../pages/ExplorePage";
 import ExpensesPage from "../../pages/ExpensesPage";
 import GetReadyPage from "../../pages/GetReadyPage";
@@ -33,32 +33,64 @@ const Arrow = styled.div`
   color: #323232;
 `;
 
-export default class Sidebar extends Component {
-  closeSidebar = () => {
-    this.props.closeSideMenu();
+class Sidebar extends Component {
+  state = {
+    mustLogin: false,
+  };
 
-    history.back();
+  toggleLoginForm = () => {
+    this.setState({ mustLogin: !this.state.mustLogin });
+
+    // CHECK IF APP STATE HAS SAME SHOULDLOGIN STATE AS MUSTLOGIN BEFORE TOGGLE
+    this.props.auth.shouldLogin !== this.state.mustLogin
+      ? (this.props.auth.shouldLogin = this.state.mustLogin)
+      : (this.props.auth.shouldLogin = !this.state.mustLogin);
   };
 
   render() {
-    // const originPath = this.props.props;
+    const { user, closeSideMenu, login, logout, shouldLogin } = this.props.auth;
 
     return (
       <>
         <SidebarParent>
           <MenuBar className={styles.flagContainer}>
             <button
-              onClick={this.closeSidebar}
+              onClick={closeSideMenu}
               className={styles.goBackButton}
               type="button"
             >
               <i className="fas fa-arrow-left fa-dark fa-2x"></i>
             </button>
+            {user && (
+              <>
+                <h2>Hi, {user.name}</h2>
+                <button
+                  className={styles.logoutButton}
+                  onClick={() => logout()}
+                >
+                  <span>Log out</span>
+                </button>
+              </>
+            )}
+
             <h2>Take Trip To Explore</h2>
             <p>Explore</p>
-            <Button>
-              <span className={styles.button}>Proceed to activation</span>
-            </Button>
+            {!user && (
+              <Button toggleLogin={this.toggleLoginForm}>
+                <span className={styles.button}>Proceed to login</span>
+              </Button>
+            )}
+            {/* ======================== LOGIN PAGE ========================== */}
+            <CSSTransition
+              in={shouldLogin}
+              classNames="fade"
+              timeout={300}
+              unmountOnExit
+            >
+              <LoginPage login={login} logout={logout} />
+            </CSSTransition>
+            {/* ======================== LOGIN PAGE ========================== */}
+
             <p>Scroll to see more</p>
             <Arrow>
               <i className="fas fa-long-arrow-alt-down fa-dark fa-2x"></i>
@@ -123,6 +155,8 @@ export default class Sidebar extends Component {
     );
   }
 }
+
+export default withAuthContext(Sidebar);
 
 /**
  * SIDEMENU contains

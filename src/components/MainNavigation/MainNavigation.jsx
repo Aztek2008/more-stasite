@@ -1,6 +1,7 @@
 import React from "react";
 import { NavLink, BrowserRouter as Router } from "react-router-dom";
 import withAuthContext from "../hoc/withAuthContext.js";
+// import history from "history/browser";
 
 import styles from "./MainNavigation.module.css";
 
@@ -22,6 +23,7 @@ function MainNavigation({ auth, props }) {
             onClick={() => {
               auth.openSideMenu();
               props.history.push({ pathname: `${path}/ExplorePage` });
+              // history.push({ pathname: `${history.location}/ExplorePage` }); // WITH THIS METHOD HISTORY PUSH WORKS BUT PAGE CONTENT DOESN'T RENDER
             }}
             className={styles.navLink}
             exact

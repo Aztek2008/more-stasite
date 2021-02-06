@@ -144,25 +144,16 @@ export default class App extends Component {
             </Route>
             <Route
               path="/TurkeyPage"
-              render={(props) => (
-                <TurkeyPage {...props} openSideMenu={this.initOpenSideMenu} />
-              )}
+              render={(props) => <TurkeyPage {...props} />}
             />
             <Route
               path="/NorwayPage"
-              render={(props) => (
-                <NorwayPage {...props} openSideMenu={this.initOpenSideMenu} />
-              )}
+              render={(props) => <NorwayPage {...props} />}
             />
 
             <Route
               path="/MontenegroPage"
-              render={(props) => (
-                <MontenegroPage
-                  {...props}
-                  openSideMenu={this.initOpenSideMenu}
-                />
-              )}
+              render={(props) => <MontenegroPage {...props} />}
             />
           </Switch>
         </Layout>

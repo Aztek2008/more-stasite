@@ -48,14 +48,14 @@ class Sidebar extends Component {
   };
 
   render() {
-    const { user, closeSideMenu, login, logout, shouldLogin } = this.props.auth;
+    const { user, login, logout, shouldLogin } = this.props.auth;
 
     return (
       <>
         <SidebarParent>
           <MenuBar className={styles.flagContainer}>
             <button
-              onClick={closeSideMenu}
+              onClick={() => this.props.closeSideMenu()}
               className={styles.goBackButton}
               type="button"
             >

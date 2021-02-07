@@ -13,30 +13,21 @@ import AuthContext from "../../contexts/Auth.js";
 import style from "./App.module.css";
 import "./App.CSSTransition.css";
 
-const user = {
-  name: "John Galt",
-  email: "galt@gmail.com",
-};
-
 export default class App extends Component {
   state = {
     locations: ["Norway", "Turkey", "Montenegro"], //TODO: TO FIX LOCATION CHOOSE METHOD
     index: 0,
     openSidebar: false,
-    user: null,
-    shouldLogin: false,
   };
 
   componentDidMount() {
     const storedIndex = localStorage.getItem("index");
     const storedSidebarState = JSON.parse(localStorage.getItem("openSidebar"));
-    const persistedUser = JSON.parse(localStorage.getItem("currentUser"));
     const currentIndex = this.state.locations.indexOf(storedIndex);
 
     this.setState({
       openSidebar: storedSidebarState || false,
       index: currentIndex === -1 ? 0 : storedIndex,
-      user: persistedUser,
     });
   }
 
@@ -50,6 +41,7 @@ export default class App extends Component {
     const maxIndex = this.state.locations.length - 1;
     const { index } = this.state;
 
+    // CHANGING INDEX RELATING TO CURRENT INDEX IN STATE, USING IN PAGE SWITCHING(NAVIGATION) ARROW
     index < maxIndex
       ? this.setState((prevState) => ({
           index: prevState.index + 1,
@@ -92,34 +84,13 @@ export default class App extends Component {
     localStorage.removeItem("openSidebar");
   };
 
-  logIn = async () => {
-    await this.setState({ user: user });
-
-    localStorage.setItem("currentUser", JSON.stringify(this.state.user));
-  };
-
-  logOut = () => {
-    this.setState({ user: null });
-
-    localStorage.removeItem("currentUser");
-  };
-
   render() {
     const calculatedLocation = this.currentLocation();
     const calculatedPath = `/${calculatedLocation}Page`;
     const { openSidebar } = this.state;
 
     return (
-      <AuthContext.Provider
-        value={{
-          openSideMenu: this.initOpenSideMenu,
-          closeSideMenu: this.initCloseSideMenu,
-          shouldLogin: this.state.shouldLogin,
-          user: this.state.user,
-          logout: this.logOut,
-          login: this.logIn,
-        }}
-      >
+      <AuthContext>
         <Layout>
           <CSSTransition
             in={openSidebar}
@@ -127,7 +98,10 @@ export default class App extends Component {
             timeout={250}
             unmountOnExit
           >
-            <Sidebar props={calculatedPath} />
+            <Sidebar
+              props={calculatedPath}
+              closeSideMenu={this.initCloseSideMenu}
+            />
           </CSSTransition>
 
           <div className={style.buttonContainer}>
@@ -144,20 +118,29 @@ export default class App extends Component {
             </Route>
             <Route
               path="/TurkeyPage"
-              render={(props) => <TurkeyPage {...props} />}
+              render={(props) => (
+                <TurkeyPage {...props} openSideMenu={this.initOpenSideMenu} />
+              )}
             />
             <Route
               path="/NorwayPage"
-              render={(props) => <NorwayPage {...props} />}
+              render={(props) => (
+                <NorwayPage {...props} openSideMenu={this.initOpenSideMenu} />
+              )}
             />
 
             <Route
               path="/MontenegroPage"
-              render={(props) => <MontenegroPage {...props} />}
+              render={(props) => (
+                <MontenegroPage
+                  {...props}
+                  openSideMenu={this.initOpenSideMenu}
+                />
+              )}
             />
           </Switch>
         </Layout>
-      </AuthContext.Provider>
+      </AuthContext>
     );
   }
 }

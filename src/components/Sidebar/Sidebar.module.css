@@ -5,9 +5,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-family: "Amatic SC", cursive;
   font-size: x-large;
+  justify-content: flex-start;
+  font-family: "Amatic SC", cursive;
+  padding-top: 10%;
 }
 
 .flag {

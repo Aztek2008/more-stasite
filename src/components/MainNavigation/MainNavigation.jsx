@@ -21,7 +21,8 @@ function MainNavigation({ auth, props }) {
         <nav className={styles.ContainerNav}>
           <NavLink
             onClick={() => {
-              auth.openSideMenu();
+              props.openSideMenu();
+              // auth.openSideMenu();
               props.history.push({ pathname: `${path}/ExplorePage` });
               // history.push({ pathname: `${history.location}/ExplorePage` }); // WITH THIS METHOD HISTORY PUSH WORKS BUT PAGE CONTENT DOESN'T RENDER
             }}
@@ -34,7 +35,8 @@ function MainNavigation({ auth, props }) {
 
           <NavLink
             onClick={() => {
-              auth.openSideMenu();
+              props.openSideMenu();
+              // auth.openSideMenu();
               props.history.push({ pathname: `${path}/ExpensesPage` });
             }}
             className={styles.navLink}
@@ -46,7 +48,8 @@ function MainNavigation({ auth, props }) {
 
           <NavLink
             onClick={() => {
-              auth.openSideMenu();
+              props.openSideMenu();
+              // auth.openSideMenu();
               props.history.push({ pathname: `${path}/GetReadyPage` });
             }}
             className={styles.navLink}
